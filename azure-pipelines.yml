@@ -21,14 +21,13 @@ steps:
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
 
-- task: Docker@2
+- task: DockerCompose@0
   inputs:
-    containerRegistry: 'mfp-prod-registry'
-    repository: 'mfp'
-    command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
-    tags: |
-          $(Build.BuildId)
+    containerregistrytype: 'Azure Container Registry'
+    azureSubscription: 'mfp-dev-resource-manager-connection'
+    azureContainerRegistry: '{"loginServer":"mfpdev.azurecr.io", "id" : "/subscriptions/b53c773b-b409-43bd-b2ea-95fe8fd9b5c2/resourceGroups/mfp-dev/providers/Microsoft.ContainerRegistry/registries/mfpdev"}'
+    dockerComposeFile: '**/docker-compose.yml'
+    action: 'Run a Docker Compose command'
 
 - task: PublishPipelineArtifact@1
   inputs:
